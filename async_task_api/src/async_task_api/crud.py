@@ -1,32 +1,32 @@
 import time
 
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from . import model, schema
+from .model import Task
 
 
-def get_task(db: Session, task_id: int):
-    return db.query(model.Task).filter(model.Task.id == task_id).first()
+async def get_tasks(session: AsyncSession) -> list[Task]:
+    list_tasks = await session.execute(select(Task).order_by(id))
+    return list_tasks.scalars().all()
 
 
-def get_tasks(db: Session):
-    return db.query(model.Task).all()
-
-
-async def create_task(db: Session, task: schema.TaskCreate):
-
-    db_task = model.Task(base=task.base, exponent=task.exponent, status=0, result=0)
-    db.add(db_task)
-    db.commit()
-    db.add(db_task)
-    db.refresh(db_task)
+async def create_task(session: AsyncSession, base: int, exponent: int):
+    new_task = model.Task(id, base=base, exponent=exponent, status=0, result=0)
+    session.add(new_task)
 
     current_result = 1
-    for i in range(db_task.exponent):
+    for i in range(new_task.exponent):
         time.sleep(1)
-        db_task.status = ((i / db_task.exponent) * 100)
-        current_result = db_task.base * current_result
-    db_task.result = current_result
-    db_task.status = 100
+        new_task.status = ((i / new_task.exponent) * 100)
+        current_result = new_task.base * current_result
+    new_task.result = current_result
+    new_task.status = 100
 
-    return db_task
+    await session.flush()
+
+    """
+    def get_task(self: Session, task_id: int):
+        return self.query(model.Task).filter(model.Task.id == task_id).first()
+    """

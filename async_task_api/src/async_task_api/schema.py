@@ -12,8 +12,9 @@ class TaskCreate(TaskBase):
 
 class Task(TaskCreate):
     id: int
-    status: float = 0
-    result: int = 0
+
+    status: float
+    result: int
 
     class Config:
         orm_mode = True

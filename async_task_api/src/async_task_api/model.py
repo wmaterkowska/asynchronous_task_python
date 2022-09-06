@@ -7,9 +7,9 @@ class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, index=True)
-    base = Column(Integer)
-    exponent = Column(Integer)
-    status = Column(REAL)
-    result = Column(Integer)
+    base = Column(Integer, nullable=False, default=0)
+    exponent = Column(Integer, nullable=False, default=0)
+    status = Column(REAL, nullable=True, default=0)
+    result = Column(Integer, nullable=True, default=0)
 
 
