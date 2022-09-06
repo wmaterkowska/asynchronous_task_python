@@ -19,12 +19,13 @@ def get_db():
 
 
 @app.post("/tasks/", response_model=schema.Task)
-def create_task(task: schema.TaskCreate, db: Session = Depends(get_db)):
-    return crud.create_task(db=db, task=task)
+async def create_task(task: schema.TaskCreate, db: Session = Depends(get_db)):
+    task_new = await crud.create_task(db=db, task=task)
+    return task_new
 
 
 @app.get("/tasks/", response_model=list[schema.Task])
-def read_tasks(db: Session = Depends(get_db)):
+async def read_tasks(db: Session = Depends(get_db)):
     tasks = crud.get_tasks(db)
     return tasks
 
