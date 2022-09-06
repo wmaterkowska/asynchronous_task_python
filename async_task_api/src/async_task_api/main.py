@@ -1,8 +1,8 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-from . import crud, model, schema
-from .database import SessionLocal, engine
+from async_task_api.src.async_task_api import crud, model, schema
+from async_task_api.src.async_task_api.database import SessionLocal, engine
 
 model.Base.metadata.create_all(bind=engine)
 
@@ -15,6 +15,7 @@ def get_db():
     try:
         yield db
     finally:
+        print("test")
         db.close()
 
 
