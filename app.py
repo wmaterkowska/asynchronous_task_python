@@ -10,6 +10,7 @@ app = FastAPI()
 app.include_router(task_router.router)
 
 
+
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:

@@ -6,6 +6,7 @@ from db.config import Base
 class Task(Base):
     __tablename__ = 'tasks'
 
+
     id = Column(Integer, primary_key=True)
     base = Column(Integer, nullable=False)
     exponent = Column(Integer, nullable=False)
