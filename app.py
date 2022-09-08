@@ -10,7 +10,6 @@ app = FastAPI()
 app.include_router(task_router.router)
 
 
-
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:
@@ -19,4 +18,5 @@ async def startup():
 
 
 if __name__ == '__main__':
+
     asyncio.run(uvicorn.run("app:app", port=8000, host='127.0.0.1'))

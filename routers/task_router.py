@@ -2,10 +2,10 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from asynchronous_task_python.db.config import async_session
-from asynchronous_task_python.db.dals.task_dal import TaskDAL
-from asynchronous_task_python.db.models.task import Task
-from asynchronous_task_python.dependencies import get_task_dal
+from db.config import async_session
+from db.dals.task_dal import TaskDAL
+from db.models.task import Task
+from dependencies import get_task_dal
 
 router = APIRouter()
 
