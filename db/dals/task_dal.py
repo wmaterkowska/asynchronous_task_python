@@ -17,18 +17,18 @@ class TaskDAL():
         new_task = Task(base=base, exponent=exponent)
 
         async with self.db_session:
-            async with self.db_session.begin():
+            current_result = 1
+            while new_task.status != 100:
+                for i in range(new_task.exponent):
+                    time.sleep(1)
+                    current_result = new_task.base * current_result
+                    new_task.status = ((i / new_task.exponent) * 100)
+                    self.db_session.flush()
+                new_task.result = current_result
+                new_task.status = 100
 
-                while new_task.status == 100:
-                    current_result = 1
-                    for i in range(new_task.exponent):
-                        time.sleep(1)
-                        current_result = new_task.base * current_result
-                        new_task.status = ((i / new_task.exponent) * 100)
-                    new_task.result = current_result
-
-                self.db_session.add(new_task)
-                self.db_session.flush()
+        self.db_session.add(new_task)
+        await self.db_session.flush()
 
     async def get_all_tasks(self) -> List[Task]:
         q = await self.db_session.execute(select(Task).order_by(Task.id))
