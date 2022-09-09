@@ -18,5 +18,9 @@ async def startup():
 
 
 if __name__ == '__main__':
-
-    asyncio.run(uvicorn.run("app:app", port=8000, host='127.0.0.1'))
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(uvicorn.run(
+            "app:app", port=8000, host='127.0.0.1'))
+    except asyncio.CancelledError:
+        print("task was cancelled")

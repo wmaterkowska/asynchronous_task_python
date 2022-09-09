@@ -16,16 +16,17 @@ class TaskDAL():
     async def create_task(self, base: int, exponent: int):
         new_task = Task(base=base, exponent=exponent)
 
-        async with self.db_session:
-            current_result = 1
-            while new_task.status != 100:
-                for i in range(new_task.exponent):
-                    time.sleep(1)
-                    current_result = new_task.base * current_result
-                    new_task.status = ((i / new_task.exponent) * 100)
-                    self.db_session.flush()
-                new_task.result = current_result
-                new_task.status = 100
+        current_result = 1
+        new_task.status = 0
+        new_task.result = 0
+        # async with self.db_session:
+        for i in range(new_task.exponent):
+            time.sleep(1)
+            current_result = new_task.base * current_result
+            new_task.status = ((i / new_task.exponent) * 100)
+            await self.db_session.flush()
+        new_task.result = current_result
+        new_task.status = 100
 
         self.db_session.add(new_task)
         await self.db_session.flush()

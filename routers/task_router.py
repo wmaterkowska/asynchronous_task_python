@@ -1,4 +1,5 @@
 from typing import List
+import asyncio
 
 from fastapi import APIRouter, Depends
 
@@ -15,7 +16,7 @@ async def create_task(base: int, exponent: int, task_dal: TaskDAL = Depends(get_
     async with async_session() as session:
         async with session.begin():
             task_dal = TaskDAL(session)
-            return await task_dal.create_task(base, exponent)
+            return await asyncio.gather(task_dal.create_task(base, exponent))
 
 
 @router.get("/tasks")
@@ -23,4 +24,4 @@ async def get_all_tasks() -> List[Task]:
     async with async_session() as session:
         async with session.begin():
             task_dal = TaskDAL(session)
-            return await task_dal.get_all_tasks()
+            return await asyncio.gather(task_dal.get_all_tasks())
