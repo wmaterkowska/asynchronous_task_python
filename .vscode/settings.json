@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./asynchronous_task_python/db"
+    ]
+}
